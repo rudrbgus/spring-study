@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -24,6 +25,9 @@ import java.util.List;
 @RequestMapping("/auth")
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class AuthController {
+    @Value("${google.secret-key}")
+    private String GoogleSecretKey;
+
     @GetMapping
     public ResponseEntity<?> select() {
 //        System.out.println("/auth 엔드포인트로 들어옴: GET방식");
@@ -46,7 +50,7 @@ public class AuthController {
         requestBody.add("code", code);
         requestBody.add("redirect_uri", "http://localhost:8181/auth/googleLoginApi");
         requestBody.add("client_id", "508435362978-q1dmvpe2to6i1vam4j5bdr25r5sujd2c.apps.googleusercontent.com");
-        requestBody.add("client_secret", "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");
+        requestBody.add("client_secret", GoogleSecretKey);
 
         // HTTP 요청 설정
         ResponseEntity<String> responseEntity = restTemplate.exchange(
